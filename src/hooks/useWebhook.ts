@@ -13,8 +13,8 @@ export const useWebhook = () => {
     setError(null);
 
     try {
-      // Simulate API call - replace with actual n8n webhook URL
-      const response = await fetch('/api/webhook/search-lead', {
+      // Call n8n webhook
+      const response = await fetch('https://tetraeducacao-agente.app.n8n.cloud/webhook-test/jornada-do-cliente', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
