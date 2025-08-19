@@ -14,7 +14,7 @@ export const useWebhook = () => {
 
     try {
       // Call n8n webhook
-      const response = await fetch('https://tetraeducacao-agente.app.n8n.cloud/webhook-test/jornada-do-cliente', {
+      const response = await fetch('https://tetraeducacao-agente.app.n8n.cloud/webhook/jornada-do-cliente', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
