@@ -30,16 +30,48 @@ export const useWebhook = () => {
       });
 
       console.log('📡 Resposta recebida - Status:', response.status);
-      const data: WebhookResponse = await response.json();
-      console.log('📋 Dados da resposta:', data);
+      const rawData = await response.json();
+      console.log('📋 Dados da resposta:', rawData);
 
-      if (!data.success) {
-        throw new Error(data.error || 'Erro ao buscar lead');
+      // Check if response is an array and get first element, or use directly if object
+      const webhookData = Array.isArray(rawData) ? rawData[0] : rawData;
+      
+      if (!webhookData || !webhookData.lead) {
+        throw new Error('Lead não encontrado');
       }
 
-      return data.data || null;
+      // Map webhook response to Lead interface
+      const mappedLead: Lead = {
+        id: webhookData.lead.email || Math.random().toString(),
+        nome: webhookData.lead.nome,
+        email: webhookData.lead.email,
+        telefone: webhookData.lead.telefone?.toString() || '',
+        origem_campanha: webhookData.origem?.campanha || 'N/A',
+        cadastro_landing: !!webhookData.cadastro?.data,
+        entrada_whatsapp: !!webhookData.whatsapp?.entrou_grupo,
+        respondeu_pesquisa: !!webhookData.pesquisa,
+        respostas_pesquisa: webhookData.pesquisa ? [
+          `Função: ${webhookData.pesquisa.funcao}`,
+          `Empresa: ${webhookData.pesquisa.empresa}`,
+          `Renda: ${webhookData.pesquisa.renda}`,
+          `Objetivo: ${webhookData.pesquisa.objetivo}`,
+          `Área de Atuação: ${webhookData.pesquisa.area_atuacao}`
+        ].filter(Boolean) : [],
+        presenca_lives: {
+          live1: !!webhookData.lives?.aula1 && Object.keys(webhookData.lives.aula1).length > 0,
+          live2: !!webhookData.lives?.aula2 && Object.keys(webhookData.lives.aula2).length > 0,
+          live3: !!webhookData.lives?.aula3 && Object.keys(webhookData.lives.aula3).length > 0,
+          live4: !!webhookData.lives?.mentoria && Object.keys(webhookData.lives.mentoria).length > 0,
+        },
+        data_cadastro: webhookData.cadastro?.data,
+        ultimo_contato: webhookData.cadastro?.entradas?.[webhookData.cadastro.entradas.length - 1]?.split(' ')[0],
+      };
+
+      console.log('✅ Lead mapeado com sucesso:', mappedLead);
+      return mappedLead;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+      console.error('❌ Erro na busca:', errorMessage);
       setError(errorMessage);
       return null;
     } finally {
@@ -94,7 +126,7 @@ export const useWebhook = () => {
   };
 
   console.log('🔧 Modo atual:', process.env.NODE_ENV);
-  console.log('🎯 Usando função:', process.env.NODE_ENV === 'development' ? 'MOCK' : 'WEBHOOK REAL');
+  console.log('🎯 Usando função:', 'WEBHOOK REAL');
   
   return {
     searchLead: searchLead, // Sempre usar webhook real para teste
