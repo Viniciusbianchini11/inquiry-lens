@@ -9,15 +9,10 @@ export const useWebhook = () => {
     searchValue: string,
     searchType: SearchType
   ): Promise<Lead | null> => {
-    console.log('🔍 Iniciando busca:', { searchValue, searchType });
     setLoading(true);
     setError(null);
 
     try {
-      // Call n8n webhook
-      console.log('📡 Fazendo requisição para webhook:', 'https://tetraeducacao-agente.app.n8n.cloud/webhook/jornada-do-cliente');
-      console.log('📦 Dados enviados:', { searchValue, searchType });
-      
       const response = await fetch('https://tetraeducacao-agente.app.n8n.cloud/webhook/jornada-do-cliente', {
         method: 'POST',
         headers: {
@@ -29,9 +24,7 @@ export const useWebhook = () => {
         }),
       });
 
-      console.log('📡 Resposta recebida - Status:', response.status);
       const rawData = await response.json();
-      console.log('📋 Dados da resposta:', rawData);
 
       // Check if response is an array and get first element, or use directly if object
       const webhookData = Array.isArray(rawData) ? rawData[0] : rawData;
@@ -67,11 +60,9 @@ export const useWebhook = () => {
         ultimo_contato: webhookData.cadastro?.entradas?.[webhookData.cadastro.entradas.length - 1]?.split(' ')[0],
       };
 
-      console.log('✅ Lead mapeado com sucesso:', mappedLead);
       return mappedLead;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
-      console.error('❌ Erro na busca:', errorMessage);
       setError(errorMessage);
       return null;
     } finally {
@@ -125,11 +116,8 @@ export const useWebhook = () => {
     }
   };
 
-  console.log('🔧 Modo atual:', process.env.NODE_ENV);
-  console.log('🎯 Usando função:', 'WEBHOOK REAL');
-  
   return {
-    searchLead: searchLead, // Sempre usar webhook real para teste
+    searchLead,
     loading,
     error,
   };

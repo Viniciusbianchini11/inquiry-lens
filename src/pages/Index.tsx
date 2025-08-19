@@ -20,22 +20,24 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ background: 'var(--gradient-hero)' }}>
       {/* Header */}
-      <header className="bg-card border-b shadow-sm">
+      <header className="bg-black/20 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <img src={logo} alt="LeadTracker Pro" className="h-10 w-10 rounded-lg" />
+              <div className="h-10 w-10 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg">
+                T
+              </div>
               <div>
-                <h1 className="text-xl font-bold">LeadTracker Pro</h1>
-                <p className="text-sm text-muted-foreground">Gestão de Jornada de Leads</p>
+                <h1 className="text-xl font-bold text-white">TetraLeads</h1>
+                <p className="text-sm text-green-200">Gestão de Jornada de Leads</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-green-200">
                 <Users className="h-4 w-4" />
-                Time Comercial
+                Acesso Antecipado
               </div>
             </div>
           </div>
@@ -43,27 +45,43 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
-            Acompanhe a Jornada dos Seus Leads
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            O que você quer 
+            <br />
+            <span className="bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">
+              encontrar?
+            </span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Busque informações completas sobre cada lead: origem da campanha, participação em grupos, 
-            respostas de pesquisas e presença nas lives.
+          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-12">
+            Encontre sua ideia e deixe a IA cuidar do resto
           </p>
-        </div>
 
-        {/* Search Box */}
-        <div className="max-w-4xl mx-auto">
-          <SearchBox onSearch={handleSearch} loading={loading} />
+          {/* Search Box */}
+          <div className="max-w-2xl mx-auto mb-8">
+            <SearchBox onSearch={handleSearch} loading={loading} />
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <button className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/20">
+              Buscar por email
+            </button>
+            <button className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/20">
+              Buscar por telefone
+            </button>
+            <button className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/20">
+              Buscar por nome
+            </button>
+          </div>
         </div>
 
         {/* Error Message */}
         {error && (
           <div className="max-w-4xl mx-auto mb-6">
-            <Alert variant="destructive">
+            <Alert variant="destructive" className="bg-red-900/20 border-red-400/30 text-red-200">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{error}</AlertDescription>
             </Alert>
@@ -80,15 +98,16 @@ const Index = () => {
 
           {searchPerformed && !lead && !loading && !error && (
             <div className="text-center py-12">
-              <div className="p-4 bg-muted/30 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Users className="h-8 w-8 text-muted-foreground" />
+              <div className="p-4 bg-white/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center backdrop-blur-sm">
+                <Users className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-lg font-medium mb-2">Nenhum lead encontrado</h3>
-              <p className="text-muted-foreground mb-4">
+              <h3 className="text-lg font-medium mb-2 text-white">Nenhum lead encontrado</h3>
+              <p className="text-gray-300 mb-4">
                 Não foi possível encontrar um lead com os dados informados.
               </p>
               <Button 
                 variant="outline" 
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
                 onClick={() => {
                   setSearchPerformed(false);
                   setLead(null);
@@ -101,23 +120,13 @@ const Index = () => {
 
           {!searchPerformed && !loading && (
             <div className="text-center py-12">
-              <div className="p-4 bg-primary/10 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+              <div className="p-4 bg-primary/20 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center backdrop-blur-sm">
                 <BarChart3 className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-lg font-medium mb-2">Pronto para Buscar</h3>
-              <p className="text-muted-foreground mb-6">
+              <h3 className="text-lg font-medium mb-2 text-white">Pronto para Buscar</h3>
+              <p className="text-gray-300 mb-6">
                 Digite o nome, email ou telefone do lead que você deseja consultar.
               </p>
-              
-              {/* Demo Suggestion */}
-              <div className="bg-muted/30 p-4 rounded-lg max-w-md mx-auto">
-                <p className="text-sm text-muted-foreground mb-2">💡 Para testar, experimente buscar:</p>
-                <div className="space-y-1 text-sm">
-                  <div className="font-medium">Nome: João Silva</div>
-                  <div className="font-medium">Email: joao.silva@email.com</div>
-                  <div className="font-medium">Telefone: 99999-9999</div>
-                </div>
-              </div>
             </div>
           )}
         </div>
