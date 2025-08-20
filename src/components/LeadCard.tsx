@@ -29,7 +29,7 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
   };
 
   return (
-    <Card className="w-full max-w-2xl shadow-[var(--shadow-card)] border-0 bg-gradient-to-br from-card to-secondary/30">
+    <Card className="w-full max-w-4xl mx-auto shadow-[var(--shadow-card)] border-0 bg-gradient-to-br from-card to-secondary/30">
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -202,20 +202,11 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
 
         {/* Dates */}
         <Separator />
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <div className="font-medium">Data do Cadastro</div>
-              <div className="text-muted-foreground">{formatDate(lead.data_cadastro)}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <div className="font-medium">Último Contato</div>
-              <div className="text-muted-foreground">{formatDate(lead.ultimo_contato)}</div>
-            </div>
+        <div className="flex items-center gap-2 text-sm">
+          <Calendar className="h-4 w-4 text-muted-foreground" />
+          <div>
+            <div className="font-medium">Data do Cadastro</div>
+            <div className="text-muted-foreground">{formatDate(lead.data_cadastro)}</div>
           </div>
         </div>
       </CardContent>
