@@ -36,8 +36,8 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm text-green-200">
-                <Users className="h-4 w-4" />
-                Acesso Antecipado
+                <BarChart3 className="h-4 w-4" />
+                Sistema de Gestão
               </div>
             </div>
           </div>

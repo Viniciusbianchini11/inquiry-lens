@@ -4,10 +4,14 @@ export interface Lead {
   email: string;
   telefone: string;
   origem_campanha: string;
+  utm_source?: string;
+  utm_medium?: string;
+  utm_term?: string;
+  utm_content?: string;
   cadastro_landing: boolean;
   entrada_whatsapp: boolean;
   respondeu_pesquisa: boolean;
-  respostas_pesquisa?: string[];
+  respostas_pesquisa?: any;
   presenca_lives: {
     live1: boolean;
     live2: boolean;

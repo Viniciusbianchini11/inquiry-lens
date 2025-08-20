@@ -29,84 +29,36 @@ export const useWebhook = () => {
       // Check if response is an array and get first element, or use directly if object
       const webhookData = Array.isArray(rawData) ? rawData[0] : rawData;
       
-      if (!webhookData || !webhookData.lead) {
+      if (!webhookData) {
         throw new Error('Lead não encontrado');
       }
 
-      // Map webhook response to Lead interface
+      // Map webhook response to Lead interface - handle both formats
       const mappedLead: Lead = {
-        id: webhookData.lead.email || Math.random().toString(),
-        nome: webhookData.lead.nome,
-        email: webhookData.lead.email,
-        telefone: webhookData.lead.telefone?.toString() || '',
+        id: webhookData.lead?.email || webhookData.email || webhookData['E-MAIL'] || Math.random().toString(),
+        nome: webhookData.lead?.nome || webhookData.nome || webhookData.NOME,
+        email: webhookData.lead?.email || webhookData.email || webhookData['E-MAIL'],
+        telefone: (webhookData.lead?.telefone || webhookData.telefone)?.toString() || '',
         origem_campanha: webhookData.origem?.campanha || 'N/A',
-        cadastro_landing: !!webhookData.cadastro?.data,
-        entrada_whatsapp: !!webhookData.whatsapp?.entrou_grupo,
-        respondeu_pesquisa: !!webhookData.pesquisa,
-        respostas_pesquisa: webhookData.pesquisa ? [
-          `Função: ${webhookData.pesquisa.funcao}`,
-          `Empresa: ${webhookData.pesquisa.empresa}`,
-          `Renda: ${webhookData.pesquisa.renda}`,
-          `Objetivo: ${webhookData.pesquisa.objetivo}`,
-          `Área de Atuação: ${webhookData.pesquisa.area_atuacao}`
-        ].filter(Boolean) : [],
+        utm_source: webhookData.origem?.utm_source || webhookData.utm_source || webhookData['UTM SOURCE'],
+        utm_medium: webhookData.origem?.utm_medium || webhookData.utm_medium || webhookData['UTM MEDIUM'],
+        utm_term: webhookData.origem?.utm_term || webhookData.utm_term || webhookData['UTM TERM'],
+        utm_content: webhookData.origem?.utm_content || webhookData.utm_content || webhookData['UTM CONTENT'],
+        cadastro_landing: !!(webhookData.cadastro?.data || webhookData.DATA),
+        entrada_whatsapp: !!(webhookData.whatsapp?.entrou_grupo || webhookData.entrou_no_grupo),
+        respondeu_pesquisa: !!(webhookData.pesquisa || webhookData.resposta_pesquisa),
+        respostas_pesquisa: webhookData.pesquisa || webhookData.resposta_pesquisa,
         presenca_lives: {
-          live1: !!webhookData.lives?.aula1 && Object.keys(webhookData.lives.aula1).length > 0,
-          live2: !!webhookData.lives?.aula2 && Object.keys(webhookData.lives.aula2).length > 0,
-          live3: !!webhookData.lives?.aula3 && Object.keys(webhookData.lives.aula3).length > 0,
-          live4: !!webhookData.lives?.mentoria && Object.keys(webhookData.lives.mentoria).length > 0,
+          live1: !!(webhookData.lives?.aula1 && Object.keys(webhookData.lives.aula1).length > 0),
+          live2: !!(webhookData.lives?.aula2 && Object.keys(webhookData.lives.aula2).length > 0),
+          live3: !!(webhookData.lives?.aula3 && Object.keys(webhookData.lives.aula3).length > 0),
+          live4: !!(webhookData.lives?.mentoria && Object.keys(webhookData.lives.mentoria).length > 0),
         },
-        data_cadastro: webhookData.cadastro?.data,
+        data_cadastro: webhookData.cadastro?.data || webhookData.DATA,
         ultimo_contato: webhookData.cadastro?.entradas?.[webhookData.cadastro.entradas.length - 1]?.split(' ')[0],
       };
 
       return mappedLead;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
-      setError(errorMessage);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Mock function for development
-  const mockSearchLead = async (
-    searchValue: string,
-    searchType: SearchType
-  ): Promise<Lead | null> => {
-    setLoading(true);
-    setError(null);
-
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    try {
-      // Mock data for development
-      const mockLead: Lead = {
-        id: '1',
-        nome: 'João Silva',
-        email: 'joao.silva@email.com',
-        telefone: '(11) 99999-9999',
-        origem_campanha: 'IEA1',
-        cadastro_landing: true,
-        entrada_whatsapp: true,
-        respondeu_pesquisa: true,
-        respostas_pesquisa: ['Interessado em investimentos', 'Renda entre 5-10k'],
-        presenca_lives: {
-          live1: true,
-          live2: true,
-          live3: false,
-          live4: false,
-        },
-        data_cadastro: '2024-01-15',
-        ultimo_contato: '2024-01-20',
-      };
-
-      return searchValue.toLowerCase().includes('joao') || 
-             searchValue.toLowerCase().includes('silva') ||
-             searchValue.includes('joao.silva@email.com') ||
-             searchValue.includes('99999-9999') ? mockLead : null;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(errorMessage);

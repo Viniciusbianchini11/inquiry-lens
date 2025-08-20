@@ -72,6 +72,41 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
           </div>
         </div>
 
+        {/* UTM Info */}
+        {(lead.utm_source || lead.utm_medium || lead.utm_term || lead.utm_content) && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
+                <Target className="h-4 w-4" />
+                Informações UTM
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                {lead.utm_source && (
+                  <div className="p-2 bg-accent/10 rounded border-l-2 border-accent">
+                    <span className="font-medium">Source:</span> {lead.utm_source}
+                  </div>
+                )}
+                {lead.utm_medium && (
+                  <div className="p-2 bg-accent/10 rounded border-l-2 border-accent">
+                    <span className="font-medium">Medium:</span> {lead.utm_medium}
+                  </div>
+                )}
+                {lead.utm_term && (
+                  <div className="p-2 bg-accent/10 rounded border-l-2 border-accent">
+                    <span className="font-medium">Term:</span> {lead.utm_term}
+                  </div>
+                )}
+                {lead.utm_content && (
+                  <div className="p-2 bg-accent/10 rounded border-l-2 border-accent">
+                    <span className="font-medium">Content:</span> {lead.utm_content}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
         <Separator />
 
         {/* Journey Status */}
@@ -83,8 +118,8 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
               <FileText className="h-4 w-4" />
             </div>
             <div className="text-xs font-medium">Landing Page</div>
-            <Badge variant={lead.cadastro_landing ? 'default' : 'secondary'} className="mt-1 text-xs">
-              {lead.cadastro_landing ? 'Cadastrado' : 'Pendente'}
+            <Badge variant={lead.cadastro_landing ? 'default' : 'destructive'} className="mt-1 text-xs">
+              {lead.cadastro_landing ? 'Cadastrado' : 'Não cadastrado'}
             </Badge>
           </div>
 
@@ -95,8 +130,8 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
               <MessageCircle className="h-4 w-4" />
             </div>
             <div className="text-xs font-medium">WhatsApp</div>
-            <Badge variant={lead.entrada_whatsapp ? 'default' : 'secondary'} className="mt-1 text-xs">
-              {lead.entrada_whatsapp ? 'Participando' : 'Pendente'}
+            <Badge variant={lead.entrada_whatsapp ? 'default' : 'destructive'} className="mt-1 text-xs">
+              {lead.entrada_whatsapp ? 'Participando' : 'Não entrou'}
             </Badge>
           </div>
 
@@ -107,8 +142,8 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
               <FileText className="h-4 w-4" />
             </div>
             <div className="text-xs font-medium">Pesquisa</div>
-            <Badge variant={lead.respondeu_pesquisa ? 'default' : 'secondary'} className="mt-1 text-xs">
-              {lead.respondeu_pesquisa ? 'Respondida' : 'Pendente'}
+            <Badge variant={lead.respondeu_pesquisa ? 'default' : 'destructive'} className="mt-1 text-xs">
+              {lead.respondeu_pesquisa ? 'Respondida' : 'Não respondeu'}
             </Badge>
           </div>
 
@@ -126,7 +161,7 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
         </div>
 
         {/* Survey Responses */}
-        {lead.respondeu_pesquisa && lead.respostas_pesquisa && lead.respostas_pesquisa.length > 0 && (
+        {lead.respondeu_pesquisa && lead.respostas_pesquisa && (
           <>
             <Separator />
             <div>
@@ -135,9 +170,9 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
                 Respostas da Pesquisa
               </h4>
               <div className="space-y-2">
-                {lead.respostas_pesquisa.map((resposta, index) => (
+                {Object.entries(lead.respostas_pesquisa).map(([key, value], index) => (
                   <div key={index} className="text-sm p-2 bg-accent/10 rounded border-l-2 border-accent">
-                    {resposta}
+                    <span className="font-medium capitalize">{key.replace(/_/g, ' ')}:</span> {String(value)}
                   </div>
                 ))}
               </div>
