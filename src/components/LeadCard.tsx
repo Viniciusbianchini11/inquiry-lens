@@ -34,7 +34,7 @@ export const LeadCard = ({ lead }: LeadCardProps) => {
   };
 
   return (
-    <Card className="w-full max-w-[95vw] mx-auto shadow-[var(--shadow-card)] border-0 bg-gradient-to-br from-card to-secondary/30">
+    <Card className="w-full max-w-7xl mx-auto shadow-[var(--shadow-card)] border-0 bg-gradient-to-br from-card to-secondary/30">
       <CardHeader className="pb-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
