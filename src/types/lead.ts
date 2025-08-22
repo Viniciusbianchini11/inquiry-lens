@@ -19,7 +19,7 @@ export interface Lead {
     live4: boolean;
   };
   data_cadastro?: string;
-  ultimo_contato?: string;
+  DATA?: string;
 }
 
 export interface WebhookResponse {

@@ -55,7 +55,7 @@ export const useWebhook = () => {
           live4: !!(webhookData.lives?.mentoria && Object.keys(webhookData.lives.mentoria).length > 0),
         },
         data_cadastro: webhookData.cadastro?.data || webhookData.DATA,
-        ultimo_contato: webhookData.cadastro?.entradas?.[webhookData.cadastro.entradas.length - 1]?.split(' ')[0],
+        DATA: webhookData.DATA,
       };
 
       return mappedLead;
